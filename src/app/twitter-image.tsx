@@ -1,50 +1,81 @@
-
-// app/twitter-image.tsx
 import { ImageResponse } from 'next/og'
 
-export const runtime = 'edge'
-
-export const alt = 'Dishcovery - AI-Powered Recipe Discovery'
-export const size = {
-    width: 1200,
-    height: 630,
+// Configuration object for the image
+const config = {
+    runtime: 'edge',
+    alt: 'Dynamic OpenGraph Image',
+    size: {
+        width: 1200,
+        height: 630,
+    },
+    contentType: 'image/png',
+    defaults: {
+        title: 'Your App Name',
+        subtitle: 'Your App Tagline',
+        gradientStart: '#4CAF50',
+        gradientEnd: '#45a049',
+        titleSize: 60,
+        subtitleSize: 36,
+        padding: 40,
+    }
 }
 
-export const contentType = 'image/png'
+export const runtime = config.runtime
+export const alt = config.alt
+export const size = config.size
+export const contentType = config.contentType
 
-export default async function Image() {
+interface ImageProps {
+    title?: string
+    subtitle?: string
+    gradientStart?: string
+    gradientEnd?: string
+    titleSize?: number
+    subtitleSize?: number
+    padding?: number
+}
+
+export default async function Image({
+    title = config.defaults.title,
+    subtitle = config.defaults.subtitle,
+    gradientStart = config.defaults.gradientStart,
+    gradientEnd = config.defaults.gradientEnd,
+    titleSize = config.defaults.titleSize,
+    subtitleSize = config.defaults.subtitleSize,
+    padding = config.defaults.padding,
+}: ImageProps = {}) {
     return new ImageResponse(
         (
             <div
                 style={{
-                    background: 'linear-gradient(to bottom right, #4CAF50, #45a049)',
+                    background: `linear-gradient(to bottom right, ${gradientStart}, ${gradientEnd})`,
                     width: '100%',
                     height: '100%',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '40px',
+                    padding: `${padding}px`,
                 }}
             >
                 <div
                     style={{
-                        fontSize: 60,
+                        fontSize: titleSize,
                         fontWeight: 'bold',
                         color: 'white',
                         marginBottom: 20,
                     }}
                 >
-                    Dishcovery
+                    {title}
                 </div>
                 <div
                     style={{
-                        fontSize: 36,
+                        fontSize: subtitleSize,
                         color: 'white',
                         textAlign: 'center',
                     }}
                 >
-                    AI-Powered Recipe Discovery
+                    {subtitle}
                 </div>
             </div>
         ),
